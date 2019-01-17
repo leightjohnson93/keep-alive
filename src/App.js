@@ -1,28 +1,40 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import logo from './logo.svg'
+import './App.css'
 
 class App extends Component {
+  state = {
+    apps: [
+      'https://secure-wildwood-12307.herokuapp.com',
+      'https://shrouded-atoll-12007.herokuapp.com'
+    ],
+    interval: 300000
+  }
+
+  toMinutes = ms => `${ms / 1000 / 60} minutes`
+
+  componentDidMount() {
+    const { apps, interval } = this.state
+    setInterval(() => apps.forEach(app => fetch(app)), interval)
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <ul>
+            Sites to ping every {this.toMinutes(this.state.interval)}:
+            {this.state.apps.map(app => (
+              <li key={app}>
+                <code>{app}</code>
+              </li>
+            ))}
+          </ul>
         </header>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
