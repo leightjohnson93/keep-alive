@@ -8,14 +8,20 @@ class App extends Component {
       'https://secure-wildwood-12307.herokuapp.com',
       'https://shrouded-atoll-12007.herokuapp.com'
     ],
-    interval: 300000
+    interval: 300000,
+    lastPing: 'unknown'
   }
 
   toMinutes = ms => `${ms / 1000 / 60} minutes`
 
   componentDidMount() {
     const { apps, interval } = this.state
-    setInterval(() => apps.forEach(app => fetch(app)), interval)
+    setInterval(() => {
+      const timeStamp = Date()
+      apps.forEach(app => fetch(app))
+      console.log(`Pinging urls: ${timeStamp}`)
+      this.setState({ lastPing: timeStamp })
+    }, interval)
   }
 
   render() {
@@ -30,7 +36,9 @@ class App extends Component {
                 <code>{app}</code>
               </li>
             ))}
+            <p>Sites last hit at: {this.state.lastPing}</p>
           </ul>
+          <p />
         </header>
       </div>
     )
